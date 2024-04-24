@@ -17,6 +17,7 @@ import {
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
 import { nanoid } from 'nanoid'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 
 export function PromptForm({
   input,
@@ -29,6 +30,7 @@ export function PromptForm({
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
   const { submitUserMessage, describeImage } = useActions()
   const [_, setMessages] = useUIState<typeof AI>()
+  const [textareaHeight, setTextareaHeight] = React.useState(0)
 
   React.useEffect(() => {
     if (inputRef.current) {
@@ -118,7 +120,12 @@ export function PromptForm({
           }
         }}
       />
-      <div className="relative flex max-h-60 w-full grow flex-col overflow-hidden bg-zinc-100 px-12 sm:rounded-full sm:px-12">
+      <div
+        className={cn(
+          'relative flex max-h-60 w-full grow flex-col overflow-hidden bg-background px-8 sm:rounded-full sm:border sm:px-12',
+          textareaHeight >= 82 ? 'sm:rounded-3xl' : ''
+        )}
+      >
         {/* <Tooltip>
           <TooltipTrigger asChild> */}
         <Button
@@ -149,6 +156,7 @@ export function PromptForm({
           rows={1}
           value={input}
           onChange={e => setInput(e.target.value)}
+          onHeightChange={h => setTextareaHeight(h)}
         />
         <div className="absolute right-4 top-[13px] sm:right-4">
           <Tooltip>
